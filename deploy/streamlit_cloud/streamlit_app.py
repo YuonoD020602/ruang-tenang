@@ -59,4 +59,10 @@ def start_backend():
 
 
 start_backend()
+
+# Streamlit hanya memuat ulang file utama saat kode di repo berubah. Modul tampilan di src/frontend
+# dibuang dari cache supaya perubahan tampilan setelah push langsung terpakai tanpa reboot.
+for _name in [m for m in sys.modules if m.startswith("src.frontend")]:
+    del sys.modules[_name]
+
 runpy.run_path(str(ROOT / "src" / "frontend" / "app.py"), run_name="__main__")
