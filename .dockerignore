@@ -1,0 +1,10 @@
+.env
+mlruns/
+mlflow.db
+mlflow-data/
+**/__pycache__/
+.pytest_cache/
+data/processed/train.csv
+data/processed/test.csv
+tests/
+deploy/

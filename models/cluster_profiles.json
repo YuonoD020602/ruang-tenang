@@ -1,0 +1,226 @@
+{
+  "set_fitur_terpilih": "bentuk_profil",
+  "k_terpilih": 5,
+  "aturan_pemilihan": "set fitur bentuk_profil, silhouette terbaik di antara k=3..6",
+  "korelasi_antar_skala": {
+    "skor_depresi": {
+      "skor_depresi": 1.0,
+      "skor_kecemasan": 0.66,
+      "skor_stres": 0.74
+    },
+    "skor_kecemasan": {
+      "skor_depresi": 0.66,
+      "skor_kecemasan": 1.0,
+      "skor_stres": 0.8
+    },
+    "skor_stres": {
+      "skor_depresi": 0.74,
+      "skor_kecemasan": 0.8,
+      "skor_stres": 1.0
+    }
+  },
+  "mlflow_run_id": "58c0fbf1df0540a9bbd3d28695a49206",
+  "registered_model": "dass42_profile_cluster",
+  "registered_version": 1,
+  "perbandingan": [
+    {
+      "set_fitur": "tingkat",
+      "k": 2,
+      "run_id": "013651b9e4ae4a01a9926f27979b785d",
+      "silhouette": 0.4671,
+      "davies_bouldin": 0.7854,
+      "ukuran_terkecil_persen": 46.8
+    },
+    {
+      "set_fitur": "tingkat",
+      "k": 3,
+      "run_id": "fe15dd69b7914752a4f0f5e00be64ad9",
+      "silhouette": 0.3732,
+      "davies_bouldin": 0.9504,
+      "ukuran_terkecil_persen": 26.4
+    },
+    {
+      "set_fitur": "tingkat",
+      "k": 4,
+      "run_id": "11b24666a1624bf698b0817c1682bd92",
+      "silhouette": 0.3168,
+      "davies_bouldin": 1.0939,
+      "ukuran_terkecil_persen": 17.8
+    },
+    {
+      "set_fitur": "tingkat",
+      "k": 5,
+      "run_id": "517a1a8808b748c1920b5b67075c5e74",
+      "silhouette": 0.3243,
+      "davies_bouldin": 1.0631,
+      "ukuran_terkecil_persen": 15.5
+    },
+    {
+      "set_fitur": "tingkat",
+      "k": 6,
+      "run_id": "c8e37b64beb74edbbbadefb64978e127",
+      "silhouette": 0.3042,
+      "davies_bouldin": 1.0663,
+      "ukuran_terkecil_persen": 12.2
+    },
+    {
+      "set_fitur": "tingkat",
+      "k": 7,
+      "run_id": "c14c805156b844bd9212b85725237d5a",
+      "silhouette": 0.2946,
+      "davies_bouldin": 1.0908,
+      "ukuran_terkecil_persen": 10.2
+    },
+    {
+      "set_fitur": "tingkat",
+      "k": 8,
+      "run_id": "2fa32df767bb408db88259c09a6b2efe",
+      "silhouette": 0.2768,
+      "davies_bouldin": 1.0858,
+      "ukuran_terkecil_persen": 8.5
+    },
+    {
+      "set_fitur": "bentuk_profil",
+      "k": 2,
+      "run_id": "9bab969d349e435db7c5167c048e63c8",
+      "silhouette": 0.3617,
+      "davies_bouldin": 1.0732,
+      "ukuran_terkecil_persen": 35.5
+    },
+    {
+      "set_fitur": "bentuk_profil",
+      "k": 3,
+      "run_id": "d9ee2276e03a45caa797b5f0aa5412f0",
+      "silhouette": 0.313,
+      "davies_bouldin": 1.0627,
+      "ukuran_terkecil_persen": 25.8
+    },
+    {
+      "set_fitur": "bentuk_profil",
+      "k": 4,
+      "run_id": "0f672bfa839947329a427ecdbace0c0e",
+      "silhouette": 0.3168,
+      "davies_bouldin": 0.9356,
+      "ukuran_terkecil_persen": 16.9
+    },
+    {
+      "set_fitur": "bentuk_profil",
+      "k": 5,
+      "run_id": "58c0fbf1df0540a9bbd3d28695a49206",
+      "silhouette": 0.3205,
+      "davies_bouldin": 0.9384,
+      "ukuran_terkecil_persen": 10.8
+    },
+    {
+      "set_fitur": "bentuk_profil",
+      "k": 6,
+      "run_id": "6459c98c4d574e0ea31af96e1282790a",
+      "silhouette": 0.3027,
+      "davies_bouldin": 0.9497,
+      "ukuran_terkecil_persen": 9.3
+    },
+    {
+      "set_fitur": "bentuk_profil",
+      "k": 7,
+      "run_id": "6ab4eb9c9eec44f78696a34c6b4c57f7",
+      "silhouette": 0.3115,
+      "davies_bouldin": 0.8982,
+      "ukuran_terkecil_persen": 7.0
+    },
+    {
+      "set_fitur": "bentuk_profil",
+      "k": 8,
+      "run_id": "612c1e2a6bff4a868502b4b824a0a77d",
+      "silhouette": 0.3157,
+      "davies_bouldin": 0.8698,
+      "ukuran_terkecil_persen": 5.8
+    }
+  ],
+  "profil": [
+    {
+      "cluster_id": 0,
+      "nama": "Stres paling menonjol",
+      "ringkas": "Dibanding dua skala lain, keluhan stres relatif paling tinggi.",
+      "ukuran_persen": 19.4,
+      "pusat_bentuk_z": {
+        "depresi": -0.36,
+        "kecemasan": -0.06,
+        "stres": 0.42
+      },
+      "rata2_skor_anggota": {
+        "depresi": 15.6,
+        "kecemasan": 14.3,
+        "stres": 24.5
+      },
+      "deskripsi": "Dibanding dua skala lain, keluhan stres relatif paling tinggi. Sekitar 19% responden dalam data latih memiliki pola ini. Profil hanya menggambarkan perbandingan antarskala pada orang yang sama, bukan seberapa berat keluhannya (itu dilihat dari skoring resmi), dan bukan kategori klinis atau diagnosis."
+    },
+    {
+      "cluster_id": 1,
+      "nama": "Seimbang di ketiga skala",
+      "ringkas": "Ketiga skala berada pada tingkat yang relatif seimbang; tidak ada yang jauh lebih menonjol.",
+      "ukuran_persen": 36.5,
+      "pusat_bentuk_z": {
+        "depresi": 0.06,
+        "kecemasan": 0.13,
+        "stres": -0.18
+      },
+      "rata2_skor_anggota": {
+        "depresi": 18.1,
+        "kecemasan": 14.1,
+        "stres": 16.2
+      },
+      "deskripsi": "Ketiga skala berada pada tingkat yang relatif seimbang; tidak ada yang jauh lebih menonjol. Sekitar 36% responden dalam data latih memiliki pola ini. Profil hanya menggambarkan perbandingan antarskala pada orang yang sama, bukan seberapa berat keluhannya (itu dilihat dari skoring resmi), dan bukan kategori klinis atau diagnosis."
+    },
+    {
+      "cluster_id": 2,
+      "nama": "Depresi paling menonjol",
+      "ringkas": "Dibanding dua skala lain, keluhan depresi relatif paling tinggi.",
+      "ukuran_persen": 10.8,
+      "pusat_bentuk_z": {
+        "depresi": 0.87,
+        "kecemasan": -0.45,
+        "stres": -0.41
+      },
+      "rata2_skor_anggota": {
+        "depresi": 30.8,
+        "kecemasan": 10.7,
+        "stres": 16.2
+      },
+      "deskripsi": "Dibanding dua skala lain, keluhan depresi relatif paling tinggi. Sekitar 11% responden dalam data latih memiliki pola ini. Profil hanya menggambarkan perbandingan antarskala pada orang yang sama, bukan seberapa berat keluhannya (itu dilihat dari skoring resmi), dan bukan kategori klinis atau diagnosis."
+    },
+    {
+      "cluster_id": 3,
+      "nama": "Kecemasan paling menonjol",
+      "ringkas": "Dibanding dua skala lain, keluhan kecemasan relatif paling tinggi.",
+      "ukuran_persen": 17.6,
+      "pusat_bentuk_z": {
+        "depresi": -0.52,
+        "kecemasan": 0.56,
+        "stres": -0.04
+      },
+      "rata2_skor_anggota": {
+        "depresi": 17.4,
+        "kecemasan": 23.4,
+        "stres": 22.9
+      },
+      "deskripsi": "Dibanding dua skala lain, keluhan kecemasan relatif paling tinggi. Sekitar 18% responden dalam data latih memiliki pola ini. Profil hanya menggambarkan perbandingan antarskala pada orang yang sama, bukan seberapa berat keluhannya (itu dilihat dari skoring resmi), dan bukan kategori klinis atau diagnosis."
+    },
+    {
+      "cluster_id": 4,
+      "nama": "Depresi & stres lebih tinggi daripada kecemasan",
+      "ringkas": "Keluhan depresi dan stres relatif setara, sedangkan kecemasan relatif paling rendah.",
+      "ukuran_persen": 15.7,
+      "pusat_bentuk_z": {
+        "depresi": 0.3,
+        "kecemasan": -0.54,
+        "stres": 0.24
+      },
+      "rata2_skor_anggota": {
+        "depresi": 26.7,
+        "kecemasan": 12.2,
+        "stres": 25.3
+      },
+      "deskripsi": "Keluhan depresi dan stres relatif setara, sedangkan kecemasan relatif paling rendah. Sekitar 16% responden dalam data latih memiliki pola ini. Profil hanya menggambarkan perbandingan antarskala pada orang yang sama, bukan seberapa berat keluhannya (itu dilihat dari skoring resmi), dan bukan kategori klinis atau diagnosis."
+    }
+  ]
+}

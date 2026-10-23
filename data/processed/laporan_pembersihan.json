@@ -1,0 +1,31 @@
+{
+  "baris_awal": 39775,
+  "dibuang_usia_di_luar_18_80": 7280,
+  "dibuang_jawaban_sama_semua": 249,
+  "dibuang_kata_palsu_2_atau_lebih": 1148,
+  "dibuang_durasi_kurang_84_detik": 341,
+  "baris_bersih": 31382,
+  "baris_train": 25105,
+  "baris_test": 6277,
+  "sebaran_tingkat_depresi_persen": [
+    23.8,
+    10.3,
+    18.4,
+    16.2,
+    31.3
+  ],
+  "sebaran_tingkat_kecemasan_persen": [
+    26.6,
+    7.5,
+    18.6,
+    15.3,
+    31.9
+  ],
+  "sebaran_tingkat_stres_persen": [
+    31.9,
+    12.9,
+    22.2,
+    20.5,
+    12.5
+  ]
+}

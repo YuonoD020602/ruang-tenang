@@ -1,0 +1,12 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+# artefak MLflow lokal (besar, dibuat ulang oleh pipeline)
+mlruns/
+mlflow.db
+# data hasil olahan besar (dibuat ulang oleh pipeline); file kecil untuk aplikasi tetap di-commit
+data/processed/train.csv
+data/processed/test.csv
+.streamlit/secrets.toml
+mlflow-data/
