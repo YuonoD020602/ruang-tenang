@@ -14,7 +14,7 @@ MODE_BADGE = {
     "di_luar_topik": ("Di luar topik", "#4A5A5E"),
 }
 
-SUGGESTIONS_RESULT = ["Apa arti hasil responden ini?", "Apa bedanya stres dan kecemasan?",
+SUGGESTIONS_RESULT = ["Apa arti hasil skriningku?", "Apa yang bisa kulakukan untuk mengelola stres?",
                       "Kapan sebaiknya mencari bantuan profesional?"]
 SUGGESTIONS_GENERAL = ["Apa saja gejala depresi?", "Apa itu grounding?",
                        "Apa yang bisa dilakukan sendiri untuk mengatasi kecemasan?"]
@@ -40,11 +40,11 @@ def _sources(sources: list[dict]):
             st.caption(s["kutipan"])
 
 
-def _send(message: str, respondent_id: int | None):
+def _send(message: str, answers: dict | None):
     hist = [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages[-6:]]
     st.session_state.messages.append({"role": "user", "content": message})
     try:
-        resp = api_client.chat(message, hist, respondent_id)
+        resp = api_client.chat(message, hist, answers)
     except api_client.BackendError as e:
         resp = {"jawaban": f"Maaf, backend tidak bisa dihubungi. ({e})", "mode": "error", "sumber": []}
     st.session_state.messages.append({"role": "assistant", "content": resp["jawaban"],
@@ -52,15 +52,15 @@ def _send(message: str, respondent_id: int | None):
                                       "catatan": resp.get("catatan")})
 
 
-def render_chat(respondent_id: int | None):
+def render_chat(answers: dict | None):
     st.session_state.setdefault("messages", [])
 
     if not st.session_state.messages:
         st.caption("Coba salah satu pertanyaan ini:")
-        sugg = SUGGESTIONS_RESULT if respondent_id else SUGGESTIONS_GENERAL
+        sugg = SUGGESTIONS_RESULT if answers else SUGGESTIONS_GENERAL
         for q in sugg:
             if st.button(q, width="stretch", key=f"sugg_{q}"):
-                _send(q, respondent_id)
+                _send(q, answers)
                 st.rerun()
 
     box = st.container(height=560, border=False) if st.session_state.messages else st.container()
@@ -74,9 +74,9 @@ def render_chat(respondent_id: int | None):
             if m["role"] == "assistant":
                 _sources(m.get("sumber", []))
 
-    prompt = st.chat_input("Tanya tentang depresi, kecemasan, stres, atau hasil responden ini…")
+    prompt = st.chat_input("Tanya tentang depresi, kecemasan, stres, atau hasil skriningmu…")
     if prompt:
-        _send(prompt, respondent_id)
+        _send(prompt, answers)
         st.rerun()
 
     if st.session_state.messages and st.button("Hapus percakapan", type="tertiary"):

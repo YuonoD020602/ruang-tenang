@@ -1,4 +1,4 @@
-"""Frontend Streamlit — Demo Skrining DASS-42.
+"""Frontend Streamlit — Skrining Mandiri Depresi & Kecemasan (PHQ-9 · GAD-7).
 
 Jalankan:  streamlit run src/frontend/app.py
 (Backend harus sudah berjalan; alamatnya diatur lewat env BACKEND_URL.)
@@ -17,97 +17,93 @@ import streamlit as st  # noqa: E402
 from src.frontend import api_client  # noqa: E402
 from src.frontend.components.about_view import render_about  # noqa: E402
 from src.frontend.components.chat_view import render_chat  # noqa: E402
+from src.frontend.components.form_view import render_form  # noqa: E402
 from src.frontend.components.result_view import render_result  # noqa: E402
 
-st.set_page_config(page_title="Demo Skrining DASS-42", page_icon="🌿", layout="wide")
+st.set_page_config(page_title="Ruang Tenang · Skrining PHQ-9 & GAD-7", page_icon="🌿", layout="wide")
 
 st.markdown("""
 <style>
   .block-container {padding-top: 1.6rem; max-width: 1180px;}
   .help-banner {background:#EEF3F2;border-left:4px solid #2F6F73;border-radius:10px;padding:10px 14px;
                 font-size:0.92rem;margin-bottom:6px}
-  .demo-note {background:#FFF8EC;border-left:4px solid #C08A3E;border-radius:10px;padding:10px 14px;
-              font-size:0.92rem}
+  .note {background:#FFF8EC;border-left:4px solid #C08A3E;border-radius:10px;padding:10px 14px;font-size:0.92rem}
+  div[role="radiogroup"] {gap: 0.3rem 0.9rem; flex-wrap: wrap;}
+  div[role="radiogroup"] label p {font-size: 0.9rem;}
 </style>
 """, unsafe_allow_html=True)
 
 HELP = ("<b>Butuh teman bicara?</b> Healing119.id — telepon <b>119 ekstensi 8</b> (gratis, 24 jam). "
         "Dalam bahaya sekarang: <b>119</b> atau IGD rumah sakit terdekat.")
 
-# ---------- status backend ----------
 try:
     health = api_client.health()
+    if "kuesioner_data" not in st.session_state:
+        st.session_state.kuesioner_data = api_client.questionnaire()
 except api_client.BackendError as e:
     st.error(f"Backend belum bisa dihubungi. Pastikan backend berjalan.\n\n{e}")
     st.stop()
 
-# ---------- sidebar ----------
 with st.sidebar:
-    st.markdown("### 🌿 Demo Skrining DASS-42")
-    st.markdown("Aplikasi belajar yang menampilkan **responden contoh** dari dataset publik, lalu "
-                "menjelaskan hasilnya dengan chatbot berbasis dokumen WHO.")
+    st.markdown("### 🌿 Ruang Tenang")
+    st.markdown("Skrining mandiri gejala **depresi (PHQ-9)** dan **kecemasan (GAD-7)**, dilengkapi chatbot "
+                "berbasis dokumen WHO.")
     st.markdown(f"<div class='help-banner'>{HELP}</div>", unsafe_allow_html=True)
     st.markdown("**Status**")
     st.caption(f"Model: {'siap' if health['model_siap'] else 'belum siap'} · "
                f"Chatbot: {'LLM aktif' if health['llm_aktif'] else 'mode tanpa LLM'} · "
-               f"{health['jumlah_chunk_rag']} potongan dokumen · {health['jumlah_responden_demo']} responden demo")
+               f"{health['jumlah_chunk_rag']} potongan dokumen")
     st.markdown("**Sumber chatbot**")
     st.caption("WHO: *Hal yang Perlu Dilakukan Saat Stres* (2020, CC BY-NC-SA 3.0 IGO) · WHO Fact Sheet "
-               "Depresi & Kecemasan (2026) · Kartu pengetahuan DASS-42.")
-    st.caption("Aplikasi ini tidak berafiliasi dengan dan tidak didukung oleh WHO.")
+               "Depresi & Kecemasan (2026) · Kartu pengetahuan PHQ-9 & GAD-7.")
+    st.caption("Aplikasi ini tidak berafiliasi dengan dan tidak didukung oleh WHO atau Kementerian Kesehatan.")
 
-# ---------- header ----------
-st.markdown("## Demo Skrining DASS-42")
+st.markdown("## Skrining Mandiri Depresi & Kecemasan")
 st.markdown(
-    "<div class='demo-note'><b>Ini mode demo.</b> Kamu tidak mengisi kuesioner. Aturan penggunaan DASS tidak "
-    "mengizinkan kuesioner ini diberikan lewat aplikasi yang terbuka untuk umum, jadi yang ditampilkan adalah "
-    "jawaban <b>responden anonim</b> dari dataset publik. Hasil skrining bukan diagnosis.</div>",
+    "<div class='note'>Jawab 16 pertanyaan tentang <b>2 minggu terakhir</b>. Hasilnya adalah <b>skrining, bukan "
+    "diagnosis</b>. Jawabanmu <b>tidak disimpan</b>; hanya dipakai untuk menghitung hasil saat ini.</div>",
     unsafe_allow_html=True)
 st.write("")
 
-tab_demo, tab_about = st.tabs(["Hasil & chatbot", "Tentang data & model"])
+tab_main, tab_about = st.tabs(["Kuesioner, hasil & chatbot", "Tentang data & model"])
 
-with tab_demo:
-    info_cache = st.session_state.get("info")
-    if info_cache is None:
-        try:
-            info_cache = st.session_state["info"] = api_client.info()
-        except api_client.BackendError:
-            info_cache = None
-    profiles = {p["cluster_id"]: p["nama"] for p in info_cache["profil"]} if info_cache else {}
-
-    c1, c2, c3 = st.columns([1.6, 1, 1])
-    choice = c1.selectbox("Pilih profil pola respons", ["Semua profil"] + [profiles[k] for k in sorted(profiles)])
-    pid = None if choice == "Semua profil" else next(k for k, v in profiles.items() if v == choice)
-    c2.write("")
-    c2.write("")
-    if c2.button("🎲 Ambil responden acak", width="stretch") or "respondent" not in st.session_state:
-        st.session_state.respondent = api_client.random_respondent(pid)
-        st.session_state.messages = []
-    ids = [r["respondent_id"] for r in api_client.list_respondents(pid)["responden"]]
-    current = st.session_state.respondent["respondent_id"]
-    picked = c3.selectbox("Atau pilih nomor responden", ids, index=ids.index(current) if current in ids else None,
-                          placeholder="Nomor responden…")
-    if picked and picked != current:
-        st.session_state.respondent = api_client.get_respondent(int(picked))
-        st.session_state.messages = []
-        st.rerun()
-
-    left, right = st.columns([1.35, 1], gap="large")
+with tab_main:
+    left, right = st.columns([1.7, 1], gap="large")
     with left:
-        render_result(st.session_state.respondent)
+        if st.session_state.get("hasil") is None:
+            answers = render_form(st.session_state.kuesioner_data)
+            if answers is not None:
+                try:
+                    st.session_state.hasil = api_client.predict(answers)
+                    st.session_state.answers = answers
+                    st.session_state.messages = []
+                    st.rerun()
+                except api_client.BackendError as e:
+                    st.error(str(e))
+        else:
+            render_result(st.session_state.hasil)
+            st.write("")
+            if st.button("↺ Isi ulang kuesioner", width="stretch"):
+                for k in ("hasil", "answers", "messages"):
+                    st.session_state.pop(k, None)
+                for k in list(st.session_state.keys()):
+                    if str(k).startswith("q_"):
+                        del st.session_state[k]
+                st.rerun()
     with right:
         st.markdown("#### Tanya chatbot")
         st.caption("Jawaban diambil dari dokumen sumber dan selalu menyebut sumbernya. Chatbot tidak "
                    "mendiagnosis dan tidak membahas obat.")
-        render_chat(st.session_state.respondent["respondent_id"])
+        render_chat(st.session_state.get("answers"))
 
 with tab_about:
-    if info_cache:
-        render_about(info_cache)
-    else:
+    try:
+        info = st.session_state.get("info") or api_client.info()
+        st.session_state["info"] = info
+        render_about(info)
+    except api_client.BackendError:
         st.info("Info model belum tersedia.")
 
 st.divider()
-st.caption("Proyek belajar Bootcamp AI Engineer · DASS-42: Lovibond & Lovibond (1995), domain publik · "
-           "Data: Open Psychometrics (2019) · Bukan alat diagnosis dan bukan pengganti tenaga profesional.")
+st.caption("Proyek belajar Bootcamp AI Engineer · PHQ-9 & GAD-7: Spitzer, Williams, Kroenke dkk. (bebas dipakai) · "
+           "Data latih: Su (2023), Zenodo, CC BY 4.0 · Bukan alat diagnosis dan bukan pengganti tenaga profesional.")

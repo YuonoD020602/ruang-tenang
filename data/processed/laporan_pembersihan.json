@@ -1,31 +1,25 @@
 {
-  "baris_awal": 39775,
-  "dibuang_usia_di_luar_18_80": 7280,
-  "dibuang_jawaban_sama_semua": 249,
-  "dibuang_kata_palsu_2_atau_lebih": 1148,
-  "dibuang_durasi_kurang_84_detik": 341,
-  "baris_bersih": 31382,
-  "baris_train": 25105,
-  "baris_test": 6277,
+  "baris_awal": 24292,
+  "dibuang_usia_di_luar_18_60": 221,
+  "dibuang_jawaban_seragam_bukan_nol": 162,
+  "dibuang_total_waktu_kurang_16_detik": 326,
+  "baris_bersih": 23589,
+  "baris_train": 18871,
+  "baris_test": 4718,
+  "tanpa_keluhan_semua_nol_persen": 29.3,
+  "item9_positif_persen": 6.91,
+  "korelasi_phq9_gad7": 0.76,
   "sebaran_tingkat_depresi_persen": [
-    23.8,
-    10.3,
-    18.4,
-    16.2,
-    31.3
+    69.8,
+    24.8,
+    4.0,
+    1.1,
+    0.4
   ],
   "sebaran_tingkat_kecemasan_persen": [
-    26.6,
-    7.5,
-    18.6,
-    15.3,
-    31.9
-  ],
-  "sebaran_tingkat_stres_persen": [
-    31.9,
-    12.9,
-    22.2,
-    20.5,
-    12.5
+    83.5,
+    14.3,
+    1.6,
+    0.6
   ]
 }

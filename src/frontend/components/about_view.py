@@ -2,63 +2,65 @@
 from __future__ import annotations
 
 import pandas as pd
-import plotly.graph_objects as go
 import streamlit as st
 
-SCALES = ["depresi", "kecemasan", "stres"]
-COLORS = {"depresi": "#2F6F73", "kecemasan": "#C08A3E", "stres": "#7A6FA8"}
+SCALES = ["depresi", "kecemasan"]
+
+
+def _n(x) -> str:
+    return f"{x:,}".replace(",", ".")
 
 
 def render_about(info: dict):
     d = info["data"]
     st.markdown("#### Data")
     c = st.columns(4)
-    c[0].metric("Responden awal", f"{d['baris_awal']:,}".replace(",", "."))
-    c[1].metric("Setelah dibersihkan", f"{d['baris_bersih']:,}".replace(",", "."))
-    c[2].metric("Data latih", f"{d['baris_train']:,}".replace(",", "."))
-    c[3].metric("Data uji", f"{d['baris_test']:,}".replace(",", "."))
+    c[0].metric("Pengisian awal", _n(d["baris_awal"]))
+    c[1].metric("Setelah dibersihkan", _n(d["baris_bersih"]))
+    c[2].metric("Data latih", _n(d["baris_train"]))
+    c[3].metric("Data uji", _n(d["baris_test"]))
     st.markdown(
-        f"- Usia di luar 18–80 tahun: **{d['dibuang_usia_di_luar_18_80']:,}** dibuang\n"
-        f"- Menjawab angka yang sama untuk 42 item: **{d['dibuang_jawaban_sama_semua']:,}**\n"
-        f"- Mencentang ≥ 2 kata palsu pada tes kosakata: **{d['dibuang_kata_palsu_2_atau_lebih']:,}**\n"
-        f"- Selesai < 84 detik: **{d['dibuang_durasi_kurang_84_detik']:,}**".replace(",", "."))
-    st.caption("Sumber: survei DASS-42 online Open Psychometrics (2017–2019). Pengisi sukarela, lebih dari "
-               "separuh dari Malaysia; data tidak mewakili masyarakat Indonesia.")
+        f"- Usia di luar 18–60 tahun: **{_n(d['dibuang_usia_di_luar_18_60'])}** dibuang\n"
+        f"- Jawaban sama untuk 16 item (selain semua \"tidak pernah\"): **{_n(d['dibuang_jawaban_seragam_bukan_nol'])}**\n"
+        f"- Total waktu menjawab < 16 detik: **{_n(d['dibuang_total_waktu_kurang_16_detik'])}**")
+    st.caption(f"Sumber: dataset terbuka Zenodo (Su, 2023; CC BY 4.0), mahasiswa di Tiongkok, Februari–Maret 2021. "
+               f"{d['tanpa_keluhan_semua_nol_persen']}% menjawab \"tidak pernah\" untuk semua item. Korelasi skor "
+               f"PHQ-9 dan GAD-7: r = {d['korelasi_phq9_gad7']}. Data tidak mewakili masyarakat Indonesia.")
 
-    st.markdown("#### Model klasifikasi tingkat keparahan")
+    st.markdown("#### Model klasifikasi tingkat keluhan")
     ev = pd.DataFrame(info["evaluasi_klasifikasi"])[["algoritma", "akurasi_rata2", "f1_makro_rata2"]]
     ev.columns = ["Algoritma", "Akurasi rata-rata", "F1 makro rata-rata"]
     st.dataframe(ev.style.format({"Akurasi rata-rata": "{:.3f}", "F1 makro rata-rata": "{:.3f}"}),
                  hide_index=True, width="stretch")
-    st.caption("Regresi logistik mencapai 100% karena tingkat resmi memang dihitung dari jumlah jawaban item "
+    st.caption("Regresi logistik hampir sempurna karena tingkat resmi memang dihitung dari jumlah jawaban "
                "(hubungan linear). Model tidak menggantikan skoring resmi; ia hanya pembanding.")
 
-    st.markdown("**Eksperimen: seberapa akurat jika item dikurangi?**")
-    fig = go.Figure()
+    st.markdown("**Eksperimen: cukupkah 2–4 pertanyaan untuk menandai skor ≥ 10?**")
+    rows = []
     for s in SCALES:
-        res = info["pengurangan_item"][s]["hasil"]
-        fig.add_trace(go.Scatter(x=[r["k"] for r in res], y=[r["akurasi"] for r in res], mode="lines+markers",
-                                 name=s.capitalize(), line=dict(color=COLORS[s], width=2)))
-    fig.update_layout(height=300, margin=dict(l=10, r=10, t=10, b=40), xaxis_title="Jumlah item terpenting dipakai",
-                      yaxis_title="Akurasi tingkat", yaxis=dict(range=[0.5, 1.02], tickformat=".0%"),
-                      plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
-                      legend=dict(orientation="h", y=1.12))
-    st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
-    st.caption("Dengan 7 item per skala, tingkat tepat ditebak sekitar 3 dari 4 kali. Ini menunjukkan kenapa "
-               "versi lengkap tetap dipakai untuk hasil utama.")
+        for r in info["pengurangan_item"][s]["hasil"]:
+            rows.append({"Skala": "PHQ-9" if s == "depresi" else "GAD-7", "Metode": r["metode"],
+                         "Sensitivitas": r["sensitivitas"], "Spesifisitas": r["spesifisitas"], "AUC": r["auc"]})
+    st.dataframe(pd.DataFrame(rows).style.format({"Sensitivitas": "{:.2f}", "Spesifisitas": "{:.2f}", "AUC": "{:.3f}"}),
+                 hide_index=True, width="stretch")
+    phq2 = info["pengurangan_item"]["depresi"]["hasil"][0]
+    st.caption(f"Sensitivitas = proporsi pengisian dengan skor ≥ 10 yang berhasil ditandai. Di data ini PHQ-2 "
+               f"hanya menandai {phq2['sensitivitas'] * 100:.0f}% kasus, jadi aplikasi tetap memakai kuesioner "
+               f"lengkap. Item terpilih data tampak lebih baik, tetapi dipilih dari populasi yang sama sehingga "
+               f"belum tentu berlaku di tempat lain.")
 
-    st.markdown("#### Model clustering profil")
+    st.markdown("#### Model clustering pola keluhan")
     cl = pd.DataFrame(info["evaluasi_clustering"])
-    piv = cl.pivot(index="k", columns="set_fitur", values="silhouette")
-    st.dataframe(piv.rename(columns={"tingkat": "Silhouette · fitur tingkat",
-                                     "bentuk_profil": "Silhouette · fitur bentuk profil"}).style.format("{:.3f}"),
-                 width="stretch")
-    corr = info["korelasi_antar_skala"]
-    st.caption(f"Ketiga skala berkorelasi tinggi (depresi–stres r = {corr['skor_depresi']['skor_stres']:.2f}, "
-               f"kecemasan–stres r = {corr['skor_kecemasan']['skor_stres']:.2f}). Klaster dari skor mentah hanya "
-               "memisahkan keluhan rendah/sedang/berat, jadi aplikasi memakai klaster dari BENTUK profil: skala "
-               "mana yang relatif menonjol pada orang yang sama.")
-    prof = pd.DataFrame([{"Profil": p["nama"], "Porsi data latih": f"{p['ukuran_persen']}%",
-                          "Rata-rata skor (D/K/S)": " / ".join(str(p["rata2_skor_anggota"][s]) for s in SCALES)}
+    piv = cl.pivot(index="k", columns="set_fitur", values=["silhouette", "eta2_skor_total"])
+    piv.columns = [f"{'Silhouette' if a == 'silhouette' else 'η² skor total'} · "
+                   f"{'item mentah' if b == 'item_mentah' else 'bentuk item'}" for a, b in piv.columns]
+    st.dataframe(piv.style.format("{:.3f}"), width="stretch")
+    st.caption("η² menunjukkan seberapa besar klaster hanya mencerminkan berat-ringan keluhan. Klaster dari item "
+               "mentah (η² ≈ 0,8) sebagian besar mengulang skoring resmi, sedangkan klaster dari bentuk item "
+               "(η² < 0,1) menggambarkan keluhan apa yang menonjol. Silhouette yang rendah menandakan pola keluhan "
+               "bersifat kontinu, jadi profil adalah deskripsi, bukan kategori yang tegas.")
+    prof = pd.DataFrame([{"Profil": p["nama"], "Porsi": f"{p['ukuran_persen']}%",
+                          "Rata-rata skor PHQ-9 / GAD-7": f"{p['rata2_skor_anggota']['depresi']} / "
+                                                         f"{p['rata2_skor_anggota']['kecemasan']}"}
                          for p in info["profil"]])
     st.dataframe(prof, hide_index=True, width="stretch")

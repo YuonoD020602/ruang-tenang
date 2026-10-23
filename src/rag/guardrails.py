@@ -76,21 +76,21 @@ HELP_BANNER = ("Butuh teman bicara? Healing119.id — telepon 119 ekstensi 8 (gr
 MEDICATION_REPLY = (
     "Maaf, aku tidak membahas obat, termasuk nama obat, dosis, atau efek sampingnya. "
     "Keputusan tentang obat hanya boleh diambil bersama dokter atau psikiater yang memeriksamu langsung.\n\n"
-    "Yang bisa aku bantu: menjelaskan gejala depresi, kecemasan, dan stres; arti hasil skrining DASS-42; "
+    "Yang bisa aku bantu: menjelaskan gejala depresi, kecemasan, dan stres; arti hasil skrining PHQ-9 dan GAD-7; "
     "dan cara-cara mengelola stres dari panduan WHO."
 )
 
 INJECTION_REPLY = (
     "Aku tetap mengikuti aturan yang sama: menjawab hanya dari dokumen sumber, tidak mendiagnosis, "
-    "dan tidak membahas obat. Silakan tanyakan hal tentang depresi, kecemasan, stres, atau hasil DASS-42."
+    "dan tidak membahas obat. Silakan tanyakan hal tentang depresi, kecemasan, stres, atau hasil PHQ-9 dan GAD-7."
 )
 
 OUT_OF_SCOPE_REPLY = (
     "Maaf, pertanyaan itu di luar cakupanku. Aku hanya bisa menjawab tentang depresi, kecemasan, stres, "
-    "hasil skrining DASS-42, dan cara mengelola stres berdasarkan panduan WHO."
+    "hasil skrining PHQ-9 dan GAD-7, dan cara mengelola stres berdasarkan panduan WHO."
 )
 
 DIAGNOSIS_NOTE = (
-    "Catatan: aku tidak bisa menentukan apakah seseorang memiliki gangguan tertentu. DASS-42 adalah alat "
+    "Catatan: aku tidak bisa menentukan apakah seseorang memiliki gangguan tertentu. PHQ-9 dan GAD-7 adalah alat "
     "skrining; untuk kepastian, bicarakan dengan psikolog atau dokter."
 )

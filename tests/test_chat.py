@@ -55,7 +55,7 @@ def test_out_of_scope(text):
     ("Apa saja gejala depresi?", "who_depresi"),
     ("Apa yang bisa saya lakukan sendiri untuk mengatasi kecemasan?", "who_kecemasan"),
     ("Apa itu grounding?", "who_dwm_id"),
-    ("Kenapa saya tidak bisa mengisi kuesioner sendiri?", "kartu_dass42"),
+    ("Berapa batas skor PHQ-9 untuk depresi sedang?", "kartu_phq9_gad7"),
 ])
 def test_retrieval_hits_right_document(q, doc):
     hits = chat_mod.get_retriever().search(q, k=3)

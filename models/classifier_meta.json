@@ -1,245 +1,129 @@
 {
   "algoritma_terpilih": "logistic_regression",
-  "mlflow_run_id": "884619361d8e4be38bc415f8d9c401db",
-  "registered_model": "dass42_severity_classifier",
+  "mlflow_run_id": "3a4630483be244d4a0ec1467a609c710",
+  "registered_model": "phq9_gad7_severity_classifier",
   "registered_version": 1,
   "target": [
     "tingkat_depresi",
-    "tingkat_kecemasan",
-    "tingkat_stres"
+    "tingkat_kecemasan"
   ],
   "perbandingan_model": [
     {
       "algoritma": "logistic_regression",
-      "run_id": "884619361d8e4be38bc415f8d9c401db",
-      "akurasi_depresi": 1.0,
-      "f1_makro_depresi": 1.0,
-      "selisih_maks_1_tingkat_depresi": 1.0,
+      "run_id": "3a4630483be244d4a0ec1467a609c710",
+      "akurasi_depresi": 0.9996,
+      "f1_makro_depresi": 0.9895,
       "akurasi_kecemasan": 1.0,
       "f1_makro_kecemasan": 1.0,
-      "selisih_maks_1_tingkat_kecemasan": 1.0,
-      "akurasi_stres": 1.0,
-      "f1_makro_stres": 1.0,
-      "selisih_maks_1_tingkat_stres": 1.0,
-      "akurasi_rata2": 1.0,
-      "f1_makro_rata2": 1.0
+      "akurasi_rata2": 0.9998,
+      "f1_makro_rata2": 0.9947
     },
     {
       "algoritma": "random_forest",
-      "run_id": "0ea741eb396a46269adecaf8a920d2f2",
-      "akurasi_depresi": 0.906,
-      "f1_makro_depresi": 0.871,
-      "selisih_maks_1_tingkat_depresi": 0.9995,
-      "akurasi_kecemasan": 0.8318,
-      "f1_makro_kecemasan": 0.6725,
-      "selisih_maks_1_tingkat_kecemasan": 0.9881,
-      "akurasi_stres": 0.867,
-      "f1_makro_stres": 0.8392,
-      "selisih_maks_1_tingkat_stres": 0.9982,
-      "akurasi_rata2": 0.8682,
-      "f1_makro_rata2": 0.7942
+      "run_id": "549107227f0344dc99412a76dbb52756",
+      "akurasi_depresi": 0.9756,
+      "f1_makro_depresi": 0.8743,
+      "akurasi_kecemasan": 0.9875,
+      "f1_makro_kecemasan": 0.9146,
+      "akurasi_rata2": 0.9816,
+      "f1_makro_rata2": 0.8944
     },
     {
       "algoritma": "hist_gradient_boosting",
-      "run_id": "043d284da98c4024aa44d442c054db47",
-      "akurasi_depresi": 0.953,
-      "f1_makro_depresi": 0.9381,
-      "selisih_maks_1_tingkat_depresi": 1.0,
-      "akurasi_kecemasan": 0.9192,
-      "f1_makro_kecemasan": 0.8755,
-      "selisih_maks_1_tingkat_kecemasan": 1.0,
-      "akurasi_stres": 0.939,
-      "f1_makro_stres": 0.9311,
-      "selisih_maks_1_tingkat_stres": 1.0,
-      "akurasi_rata2": 0.9371,
-      "f1_makro_rata2": 0.9149
+      "run_id": "417f2dad9304472f8aced28d63f65cdd",
+      "akurasi_depresi": 0.9888,
+      "f1_makro_depresi": 0.8892,
+      "akurasi_kecemasan": 0.9922,
+      "f1_makro_kecemasan": 0.9129,
+      "akurasi_rata2": 0.9905,
+      "f1_makro_rata2": 0.9011
     }
   ],
   "pengurangan_item": {
     "depresi": {
-      "urutan_item_terpenting": [
-        "Q21",
-        "Q10",
-        "Q38",
-        "Q34",
-        "Q17",
-        "Q37",
-        "Q16",
-        "Q3",
-        "Q13",
-        "Q24",
-        "Q26",
-        "Q5",
-        "Q31",
-        "Q42"
-      ],
+      "prevalensi_positif_persen_test": 5.4,
       "hasil": [
         {
-          "k": 2,
-          "akurasi": 0.6409,
-          "f1_makro": 0.4865,
-          "selisih_maks_1_tingkat": 0.8933,
-          "item_milik_skala_sendiri": 2
+          "metode": "PHQ-2 (item P1, P2) ≥ 3",
+          "sensitivitas": 0.612,
+          "spesifisitas": 0.977,
+          "persen_ditandai": 5.511,
+          "auc": 0.92
         },
         {
-          "k": 3,
-          "akurasi": 0.6624,
-          "f1_makro": 0.5178,
-          "selisih_maks_1_tingkat": 0.9191,
-          "item_milik_skala_sendiri": 3
+          "metode": "2 item terpilih data (P4, P6)",
+          "sensitivitas": 0.792,
+          "spesifisitas": 0.972,
+          "persen_ditandai": 6.973,
+          "auc": 0.963
         },
         {
-          "k": 5,
-          "akurasi": 0.7083,
-          "f1_makro": 0.6004,
-          "selisih_maks_1_tingkat": 0.9544,
-          "item_milik_skala_sendiri": 5
+          "metode": "3 item terpilih data (P4, P6, P5)",
+          "sensitivitas": 0.969,
+          "spesifisitas": 0.854,
+          "persen_ditandai": 19.076,
+          "auc": 0.98
         },
         {
-          "k": 7,
-          "akurasi": 0.759,
-          "f1_makro": 0.6904,
-          "selisih_maks_1_tingkat": 0.9877,
-          "item_milik_skala_sendiri": 7
-        },
-        {
-          "k": 10,
-          "akurasi": 0.8601,
-          "f1_makro": 0.8251,
-          "selisih_maks_1_tingkat": 0.9994,
-          "item_milik_skala_sendiri": 10
-        },
-        {
-          "k": 14,
-          "akurasi": 1.0,
-          "f1_makro": 1.0,
-          "selisih_maks_1_tingkat": 1.0,
-          "item_milik_skala_sendiri": 14
+          "metode": "4 item terpilih data (P4, P6, P5, P1)",
+          "sensitivitas": 0.918,
+          "spesifisitas": 0.963,
+          "persen_ditandai": 8.457,
+          "auc": 0.985
         }
+      ],
+      "urutan_item_terpenting": [
+        "P4",
+        "P6",
+        "P5",
+        "P1",
+        "P7",
+        "P3",
+        "P8",
+        "P2",
+        "P9"
       ]
     },
     "kecemasan": {
-      "urutan_item_terpenting": [
-        "Q36",
-        "Q20",
-        "Q28",
-        "Q40",
-        "Q9",
-        "Q7",
-        "Q4",
-        "Q25",
-        "Q41",
-        "Q30",
-        "Q2",
-        "Q19",
-        "Q15",
-        "Q12"
-      ],
+      "prevalensi_positif_persen_test": 2.23,
       "hasil": [
         {
-          "k": 2,
-          "akurasi": 0.5764,
-          "f1_makro": 0.3604,
-          "selisih_maks_1_tingkat": 0.7727,
-          "item_milik_skala_sendiri": 2
+          "metode": "GAD-2 (item G1, G2) ≥ 3",
+          "sensitivitas": 0.848,
+          "spesifisitas": 0.982,
+          "persen_ditandai": 3.624,
+          "auc": 0.977
         },
         {
-          "k": 3,
-          "akurasi": 0.6149,
-          "f1_makro": 0.4397,
-          "selisih_maks_1_tingkat": 0.8402,
-          "item_milik_skala_sendiri": 3
+          "metode": "2 item terpilih data (G2, G3)",
+          "sensitivitas": 0.933,
+          "spesifisitas": 0.983,
+          "persen_ditandai": 3.709,
+          "auc": 0.99
         },
         {
-          "k": 5,
-          "akurasi": 0.6543,
-          "f1_makro": 0.4793,
-          "selisih_maks_1_tingkat": 0.8925,
-          "item_milik_skala_sendiri": 5
+          "metode": "3 item terpilih data (G2, G3, G4)",
+          "sensitivitas": 1.0,
+          "spesifisitas": 0.983,
+          "persen_ditandai": 3.9,
+          "auc": 0.998
         },
         {
-          "k": 7,
-          "akurasi": 0.7461,
-          "f1_makro": 0.5869,
-          "selisih_maks_1_tingkat": 0.957,
-          "item_milik_skala_sendiri": 7
-        },
-        {
-          "k": 10,
-          "akurasi": 0.8095,
-          "f1_makro": 0.7168,
-          "selisih_maks_1_tingkat": 0.9884,
-          "item_milik_skala_sendiri": 10
-        },
-        {
-          "k": 14,
-          "akurasi": 0.9608,
-          "f1_makro": 0.949,
-          "selisih_maks_1_tingkat": 0.9998,
-          "item_milik_skala_sendiri": 13
+          "metode": "4 item terpilih data (G2, G3, G4, G6)",
+          "sensitivitas": 1.0,
+          "spesifisitas": 0.982,
+          "persen_ditandai": 3.985,
+          "auc": 0.999
         }
-      ]
-    },
-    "stres": {
-      "urutan_item_terpenting": [
-        "Q11",
-        "Q1",
-        "Q29",
-        "Q27",
-        "Q22",
-        "Q6",
-        "Q39",
-        "Q8",
-        "Q12",
-        "Q33",
-        "Q32",
-        "Q35",
-        "Q14",
-        "Q18"
       ],
-      "hasil": [
-        {
-          "k": 2,
-          "akurasi": 0.56,
-          "f1_makro": 0.4495,
-          "selisih_maks_1_tingkat": 0.8764,
-          "item_milik_skala_sendiri": 2
-        },
-        {
-          "k": 3,
-          "akurasi": 0.5982,
-          "f1_makro": 0.492,
-          "selisih_maks_1_tingkat": 0.9068,
-          "item_milik_skala_sendiri": 3
-        },
-        {
-          "k": 5,
-          "akurasi": 0.6817,
-          "f1_makro": 0.6251,
-          "selisih_maks_1_tingkat": 0.9739,
-          "item_milik_skala_sendiri": 5
-        },
-        {
-          "k": 7,
-          "akurasi": 0.744,
-          "f1_makro": 0.7092,
-          "selisih_maks_1_tingkat": 0.9873,
-          "item_milik_skala_sendiri": 7
-        },
-        {
-          "k": 10,
-          "akurasi": 0.8106,
-          "f1_makro": 0.7848,
-          "selisih_maks_1_tingkat": 0.9978,
-          "item_milik_skala_sendiri": 10
-        },
-        {
-          "k": 14,
-          "akurasi": 1.0,
-          "f1_makro": 1.0,
-          "selisih_maks_1_tingkat": 1.0,
-          "item_milik_skala_sendiri": 14
-        }
+      "urutan_item_terpenting": [
+        "G2",
+        "G3",
+        "G4",
+        "G6",
+        "G7",
+        "G1",
+        "G5"
       ]
     }
   }

@@ -1,0 +1,39 @@
+{
+  "petunjuk": "Selama 2 minggu terakhir, seberapa sering Anda terganggu oleh masalah-masalah berikut?",
+  "pilihan": [
+    {"nilai": 0, "label": "Tidak pernah"},
+    {"nilai": 1, "label": "Beberapa hari"},
+    {"nilai": 2, "label": "Lebih dari separuh waktu"},
+    {"nilai": 3, "label": "Hampir setiap hari"}
+  ],
+  "skala": {
+    "depresi": {
+      "instrumen": "PHQ-9",
+      "item": [
+        {"kode": "P1", "teks": "Kurang tertarik atau bergairah dalam melakukan apa pun"},
+        {"kode": "P2", "teks": "Merasa murung, muram, atau putus asa"},
+        {"kode": "P3", "teks": "Sulit tidur atau mudah terbangun, atau terlalu banyak tidur"},
+        {"kode": "P4", "teks": "Merasa lelah atau kurang bertenaga"},
+        {"kode": "P5", "teks": "Kurang nafsu makan atau terlalu banyak makan"},
+        {"kode": "P6", "teks": "Kurang percaya diri, atau merasa bahwa Anda orang yang gagal atau telah mengecewakan diri sendiri atau keluarga"},
+        {"kode": "P7", "teks": "Sulit berkonsentrasi, misalnya saat membaca atau menonton televisi"},
+        {"kode": "P8", "teks": "Bergerak atau berbicara sangat lambat sehingga orang lain memperhatikan, atau sebaliknya, merasa resah atau gelisah sehingga lebih sering bergerak dari biasanya"},
+        {"kode": "P9", "teks": "Merasa lebih baik mati, atau ingin melukai diri sendiri dengan cara apa pun"}
+      ]
+    },
+    "kecemasan": {
+      "instrumen": "GAD-7",
+      "item": [
+        {"kode": "G1", "teks": "Merasa gugup, cemas, atau tegang"},
+        {"kode": "G2", "teks": "Tidak mampu menghentikan atau mengendalikan rasa khawatir"},
+        {"kode": "G3", "teks": "Terlalu mengkhawatirkan berbagai hal"},
+        {"kode": "G4", "teks": "Sulit untuk bersantai"},
+        {"kode": "G5", "teks": "Sangat gelisah sehingga sulit untuk duduk diam"},
+        {"kode": "G6", "teks": "Mudah kesal atau mudah tersinggung"},
+        {"kode": "G7", "teks": "Merasa takut, seolah-olah sesuatu yang buruk akan terjadi"}
+      ]
+    }
+  },
+  "hak_cipta": "PHQ-9 dan GAD-7 dikembangkan oleh Dr. Robert L. Spitzer, Dr. Janet B.W. Williams, Dr. Kurt Kroenke, dan rekan, dengan hibah pendidikan dari Pfizer Inc. Tidak perlu izin untuk menggandakan, menerjemahkan, menampilkan, atau menyebarkan.",
+  "catatan_terjemahan": "Teks PHQ-9 mengikuti versi Bahasa Indonesia yang beredar luas (Indonesian for Indonesia). Teks GAD-7 adalah terjemahan kerja yang diselaraskan dengan PHQ-9; sebelum dipakai di luar proyek belajar, cocokkan dengan versi Indonesia yang sudah divalidasi (mis. Budikayanti dkk., 2019)."
+}

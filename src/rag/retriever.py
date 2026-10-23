@@ -52,7 +52,7 @@ GENERIC_WORDS = {"berapa", "global", "dunia", "who", "anak", "remaja", "lansia",
                  "rawat", "prevalensi", "mengatasi", "mengelola", "tenang", "fokus", "konsentrasi", "napas"}
 
 DOMAIN_WORDS = (set(GLOSSARY) - GENERIC_WORDS) | {
-    "stres", "stress", "dass", "skor", "skala", "tingkat", "hasil", "profil", "klaster", "kuesioner",
+    "stres", "stress", "dass", "phq", "gad", "skrining", "skor", "skala", "tingkat", "hasil", "profil", "klaster", "kuesioner",
     "grounding", "melepaskan", "nilai", "emosi", "perasaan", "pikiran", "mental", "jiwa", "kesehatan",
     "tenang", "menenangkan", "rileks", "gelisah", "tegang", "marah", "kesal", "menangis", "kesepian",
     "skrining", "normal", "ringan", "berat", "item", "pernyataan", "badai", "terpancing", "baik",

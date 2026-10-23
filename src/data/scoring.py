@@ -1,51 +1,56 @@
-"""Skoring resmi DASS-42 (aturan baku, tanpa ML)."""
+"""Skoring resmi PHQ-9 & GAD-7 (aturan baku, tanpa ML)."""
 from __future__ import annotations
 
 from typing import Iterable, Mapping
 
 import pandas as pd
 
-from src.config import CUTOFFS, ITEM_COLS, LEVELS, SCALES
+from src.config import CUTOFFS, ITEM_COLS, LEVELS, MAX_SCORE, REFERRAL_SCORE, SCALES, SELF_HARM_ITEM
 
 
 def level_index(scale: str, score: int) -> int:
-    """Indeks tingkat 0..4 (Normal..Sangat berat) untuk skor suatu skala."""
+    """Indeks tingkat untuk skor suatu skala (0 = Minimal)."""
     for i, upper in enumerate(CUTOFFS[scale]):
         if score <= upper:
             return i
-    return len(LEVELS) - 1
+    return len(LEVELS[scale]) - 1
 
 
-def score_answers(answers: Mapping[str, int] | Iterable[int]) -> dict:
-    """Hitung skor & tingkat dari 42 jawaban (nilai 0-3).
-
-    `answers` boleh dict {"Q1": 0, ...} atau list 42 angka berurutan Q1..Q42.
-    """
+def _as_dict(answers: Mapping[str, int] | Iterable[int]) -> dict[str, int]:
     if isinstance(answers, Mapping):
+        missing = [c for c in ITEM_COLS if c not in answers]
+        if missing:
+            raise ValueError(f"Jawaban kurang: {missing}")
         vals = {c: int(answers[c]) for c in ITEM_COLS}
     else:
         lst = [int(v) for v in answers]
-        if len(lst) != 42:
-            raise ValueError("Harus ada tepat 42 jawaban")
+        if len(lst) != len(ITEM_COLS):
+            raise ValueError(f"Harus ada tepat {len(ITEM_COLS)} jawaban")
         vals = dict(zip(ITEM_COLS, lst))
     bad = [c for c, v in vals.items() if v not in (0, 1, 2, 3)]
     if bad:
-        raise ValueError(f"Jawaban harus 0-3; tidak valid di {bad[:5]}")
+        raise ValueError(f"Jawaban harus 0-3; tidak valid di {bad}")
+    return vals
 
+
+def score_answers(answers: Mapping[str, int] | Iterable[int]) -> dict:
+    """Hitung skor & tingkat dari 16 jawaban (9 PHQ-9 + 7 GAD-7, nilai 0-3)."""
+    vals = _as_dict(answers)
     result = {}
     for scale, items in SCALES.items():
-        s = sum(vals[f"Q{i}"] for i in items)
+        s = sum(vals[c] for c in items)
         li = level_index(scale, s)
-        result[scale] = {"skor": s, "tingkat_idx": li, "tingkat": LEVELS[li]}
+        result[scale] = {"skor": s, "skor_maks": MAX_SCORE[scale], "tingkat_idx": li,
+                         "tingkat": LEVELS[scale][li], "perlu_pemeriksaan_lanjut": s >= REFERRAL_SCORE}
+    result["item9_positif"] = vals[SELF_HARM_ITEM] > 0
     return result
 
 
 def score_frame(df: pd.DataFrame) -> pd.DataFrame:
-    """Tambahkan kolom skor_<skala> dan tingkat_<skala> (indeks 0-4) ke DataFrame item 0-3."""
-    out = df.copy()
+    """Tambahkan kolom skor_<skala> dan tingkat_<skala> ke DataFrame berisi item 0-3."""
     new = {}
     for scale, items in SCALES.items():
-        s = out[[f"Q{i}" for i in items]].sum(axis=1)
+        s = df[items].sum(axis=1)
         new[f"skor_{scale}"] = s
         new[f"tingkat_{scale}"] = s.apply(lambda x, sc=scale: level_index(sc, int(x)))
-    return pd.concat([out, pd.DataFrame(new, index=out.index)], axis=1)
+    return pd.concat([df, pd.DataFrame(new, index=df.index)], axis=1)
