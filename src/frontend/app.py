@@ -1,4 +1,4 @@
-"""Frontend Streamlit — Skrining Mandiri Depresi & Kecemasan (PHQ-9 · GAD-7).
+"""Frontend Streamlit — Ruang Tenang: skrining mandiri depresi (PHQ-9) & kecemasan (GAD-7) + chatbot.
 
 Jalankan:  streamlit run src/frontend/app.py
 (Backend harus sudah berjalan; alamatnya diatur lewat env BACKEND_URL.)
@@ -19,58 +19,51 @@ from src.frontend.components.about_view import render_about  # noqa: E402
 from src.frontend.components.chat_view import render_chat  # noqa: E402
 from src.frontend.components.form_view import render_form  # noqa: E402
 from src.frontend.components.result_view import render_result  # noqa: E402
+from src.frontend.styles import BRAND_SVG, CSS  # noqa: E402
 
-st.set_page_config(page_title="Ruang Tenang · Skrining PHQ-9 & GAD-7", page_icon="🌿", layout="wide")
-
-st.markdown("""
-<style>
-  .block-container {padding-top: 1.6rem; max-width: 1180px;}
-  .help-banner {background:#EEF3F2;border-left:4px solid #2F6F73;border-radius:10px;padding:10px 14px;
-                font-size:0.92rem;margin-bottom:6px}
-  .note {background:#FFF8EC;border-left:4px solid #C08A3E;border-radius:10px;padding:10px 14px;font-size:0.92rem}
-  div[role="radiogroup"] {gap: 0.3rem 0.9rem; flex-wrap: wrap;}
-  div[role="radiogroup"] label p {font-size: 0.9rem;}
-</style>
-""", unsafe_allow_html=True)
-
-HELP = ("<b>Butuh teman bicara?</b> Healing119.id — telepon <b>119 ekstensi 8</b> (gratis, 24 jam). "
-        "Dalam bahaya sekarang: <b>119</b> atau IGD rumah sakit terdekat.")
+st.set_page_config(page_title="Ruang Tenang — skrining depresi & kecemasan", page_icon="🌿", layout="wide",
+                   initial_sidebar_state="collapsed")
+st.markdown(CSS, unsafe_allow_html=True)
 
 try:
     health = api_client.health()
     if "kuesioner_data" not in st.session_state:
         st.session_state.kuesioner_data = api_client.questionnaire()
 except api_client.BackendError as e:
-    st.error(f"Backend belum bisa dihubungi. Pastikan backend berjalan.\n\n{e}")
+    st.error(f"Backend belum bisa dihubungi. Muat ulang halaman sebentar lagi.\n\n{e}")
     st.stop()
 
 with st.sidebar:
-    st.markdown("### 🌿 Ruang Tenang")
-    st.markdown("Skrining mandiri gejala **depresi (PHQ-9)** dan **kecemasan (GAD-7)**, dilengkapi chatbot "
-                "berbasis dokumen WHO.")
-    st.markdown(f"<div class='help-banner'>{HELP}</div>", unsafe_allow_html=True)
-    st.markdown("**Status**")
-    st.caption(f"Model: {'siap' if health['model_siap'] else 'belum siap'} · "
-               f"Chatbot: {'LLM aktif' if health['llm_aktif'] else 'mode tanpa LLM'} · "
-               f"{health['jumlah_chunk_rag']} potongan dokumen")
+    st.markdown("### Tentang aplikasi")
+    st.caption(f"Model {'siap' if health['model_siap'] else 'belum siap'}. "
+               f"Chatbot {'memakai LLM' if health['llm_aktif'] else 'dalam mode kutipan dokumen'}, "
+               f"dengan {health['jumlah_chunk_rag']} potongan dokumen.")
     st.markdown("**Sumber chatbot**")
-    st.caption("WHO: *Hal yang Perlu Dilakukan Saat Stres* (2020, CC BY-NC-SA 3.0 IGO) · WHO Fact Sheet "
-               "Depresi & Kecemasan (2026) · Kartu pengetahuan PHQ-9 & GAD-7.")
+    st.caption("WHO, *Hal yang Perlu Dilakukan Saat Stres* (2020, CC BY-NC-SA 3.0 IGO); WHO Fact Sheet Depresi "
+               "dan Kecemasan (2026); kartu pengetahuan PHQ-9 dan GAD-7.")
     st.caption("Aplikasi ini tidak berafiliasi dengan dan tidak didukung oleh WHO atau Kementerian Kesehatan.")
 
-st.markdown("## Skrining Mandiri Depresi & Kecemasan")
+has_result = st.session_state.get("hasil") is not None
+headline = "Ini gambaran perasaanmu dua minggu terakhir." if has_result else \
+           "Bagaimana kabarmu dua minggu terakhir?"
 st.markdown(
-    "<div class='note'>Jawab 16 pertanyaan tentang <b>2 minggu terakhir</b>. Hasilnya adalah <b>skrining, bukan "
-    "diagnosis</b>. Jawabanmu <b>tidak disimpan</b>; hanya dipakai untuk menghitung hasil saat ini.</div>",
+    f"<div class='rt-hero'><div class='rt-brand'>{BRAND_SVG}Ruang Tenang</div>"
+    f"<h1>{headline}</h1>"
+    "<p class='lead'>Jawab 16 pertanyaan singkat tentang suasana hati dan rasa cemas. Hasilnya skrining, bukan "
+    "diagnosis, dan jawabanmu tidak disimpan. Ada yang ingin ditanyakan? Teman Tanya siap membantu kapan saja.</p>"
+    "<div class='rt-help'><span>Butuh teman bicara sekarang?</span>"
+    "<span><b>Healing119.id</b>: telepon <b>119</b>, ekstensi <b>8</b> (gratis, 24 jam)</span>"
+    "<span>Dalam bahaya: <b>119</b> atau IGD terdekat</span></div></div>",
     unsafe_allow_html=True)
-st.write("")
+st.markdown("<a class='rt-fab' href='#teman-tanya'><span class='dot'></span>Tanya chatbot</a>",
+            unsafe_allow_html=True)
 
-tab_main, tab_about = st.tabs(["Kuesioner, hasil & chatbot", "Tentang data & model"])
+tab_main, tab_about = st.tabs(["Kuesioner dan chatbot", "Tentang data dan model"])
 
 with tab_main:
-    left, right = st.columns([1.7, 1], gap="large")
+    left, right = st.columns([1.55, 1], gap="large")
     with left:
-        if st.session_state.get("hasil") is None:
+        if not has_result:
             answers = render_form(st.session_state.kuesioner_data)
             if answers is not None:
                 try:
@@ -83,7 +76,7 @@ with tab_main:
         else:
             render_result(st.session_state.hasil)
             st.write("")
-            if st.button("↺ Isi ulang kuesioner", width="stretch"):
+            if st.button("Isi ulang kuesioner", width="stretch"):
                 for k in ("hasil", "answers", "messages"):
                     st.session_state.pop(k, None)
                 for k in list(st.session_state.keys()):
@@ -91,9 +84,6 @@ with tab_main:
                         del st.session_state[k]
                 st.rerun()
     with right:
-        st.markdown("#### Tanya chatbot")
-        st.caption("Jawaban diambil dari dokumen sumber dan selalu menyebut sumbernya. Chatbot tidak "
-                   "mendiagnosis dan tidak membahas obat.")
         render_chat(st.session_state.get("answers"))
 
 with tab_about:
@@ -102,8 +92,10 @@ with tab_about:
         st.session_state["info"] = info
         render_about(info)
     except api_client.BackendError:
-        st.info("Info model belum tersedia.")
+        st.info("Info model belum tersedia. Muat ulang halaman.")
 
-st.divider()
-st.caption("Proyek belajar Bootcamp AI Engineer · PHQ-9 & GAD-7: Spitzer, Williams, Kroenke dkk. (bebas dipakai) · "
-           "Data latih: Su (2023), Zenodo, CC BY 4.0 · Bukan alat diagnosis dan bukan pengganti tenaga profesional.")
+st.write("")
+st.markdown(
+    "<p class='rt-foot'>Proyek belajar Bootcamp AI Engineer. PHQ-9 dan GAD-7 dikembangkan oleh Spitzer, Williams, "
+    "Kroenke, dan rekan, dan bebas dipakai. Model dilatih dari data terbuka Su (2023, Zenodo, CC BY 4.0). Aplikasi "
+    "ini bukan alat diagnosis dan bukan pengganti tenaga profesional.</p>", unsafe_allow_html=True)

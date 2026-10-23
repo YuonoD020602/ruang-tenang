@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 SCALES = ["depresi", "kecemasan"]
-LABEL = {"depresi": "Depresi · PHQ-9", "kecemasan": "Kecemasan · GAD-7"}
+LABEL = {"depresi": "Depresi (PHQ-9)", "kecemasan": "Kecemasan (GAD-7)"}
 CUTOFFS = {"depresi": [4, 9, 14, 19], "kecemasan": [4, 9, 14]}
 MAX = {"depresi": 27, "kecemasan": 21}
 # dari tenang ke hangat; tidak memakai merah menyala supaya tidak menakutkan
@@ -43,8 +43,8 @@ def severity_chart(off: dict) -> go.Figure:
                           y1=idx + 0.38, fillcolor=PALETTE[s][i], line_width=0, layer="below")
     fig.add_trace(go.Bar(
         y=[LABEL[s] for s in SCALES], x=[off[s]["skor"] / MAX[s] for s in SCALES], orientation="h", width=0.28,
-        marker_color="#2F6F73", cliponaxis=False,
-        text=[f"{off[s]['skor']}/{MAX[s]} · {off[s]['tingkat']}" for s in SCALES], textposition="outside",
+        marker_color="#1E5B5A", cliponaxis=False,
+        text=[f"{off[s]['skor']}/{MAX[s]}, {off[s]['tingkat']}" for s in SCALES], textposition="outside",
         hovertemplate="%{y}<extra></extra>",
     ))
     fig.update_layout(
@@ -60,13 +60,12 @@ def render_result(res: dict):
     if off.get("item9_positif"):
         st.markdown(CRISIS_HTML, unsafe_allow_html=True)
 
-    st.markdown("#### Hasil skriningmu")
     cols = st.columns(2)
     for col, s in zip(cols, SCALES):
         li = off[s]["tingkat_idx"]
         col.markdown(
-            f"<div style='background:{PALETTE[s][li]};border-radius:14px;padding:14px 16px'>"
-            f"<div style='font-size:0.85rem;color:#4A5A5E'>{LABEL[s]}</div>"
+            f"<div style='background:{PALETTE[s][li]};border-radius:18px;padding:16px 18px'>"
+            f"<div style='font-size:0.88rem;color:#4A5A5E'>{LABEL[s]}</div>"
             f"<div style='font-size:1.9rem;font-weight:700;color:#1F2A2E;line-height:1.2'>{off[s]['skor']}"
             f"<span style='font-size:0.9rem;font-weight:400;color:#4A5A5E'> / {MAX[s]}</span></div>"
             f"<div style='font-weight:600;color:{TEXT[s][li]}'>{off[s]['tingkat']}</div></div>",
@@ -81,7 +80,7 @@ def render_result(res: dict):
     st.markdown("**Pola keluhan** (model clustering)")
     st.markdown(
         f"<div style='border:1px solid #D5E2DF;border-radius:14px;padding:14px 16px;background:#FFFFFF'>"
-        f"<div style='font-size:1.1rem;font-weight:700;color:#2F6F73'>{prof['nama']}</div>"
+        f"<div style='font-size:1.1rem;font-weight:700;color:#1E5B5A'>{prof['nama']}</div>"
         f"<div style='margin-top:6px'>{prof['deskripsi']}</div>"
         + (f"<div style='margin-top:8px;color:#8A5A12'>ⓘ {prof['catatan']}</div>" if prof.get("catatan") else "")
         + "</div>", unsafe_allow_html=True)
